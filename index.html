@@ -28,14 +28,29 @@
 		text-align: center;
 		width: 100px;
 		height: 50px;
-		border:2px solid black;		
+		border:2px solid black;
+		border-radius: 5px;		
 		margin-top: 20px;
 		line-height: 50px;
 	}
-	.intext{
-		margin: 0 auto;
-		margin-top: 20px; 
+	.add{
+		float:left; 
+		margin:0 50px; 
 	}
+	#confirm{
+		float: left;
+		width: 100px;height: 50px;
+		border:1px solid #666;
+		border-radius: 5px;
+		line-height: 50px;
+		text-align: center;
+	}
+	.intext{
+		margin:0 auto; 
+		margin-top: 20px;
+		display: inline;
+	}
+	
 </style>
 
 
@@ -43,11 +58,13 @@
 	<div class="con"><canvas id="canvas" height="500px" width="1000px"></canvas>
 	<canvas id="canvas2" height="50px" width="100px"></canvas></div>
 	<div class="intext">
-		<textarea name="addtext" style="height:100px;width: 200px;">在此处输入你想要添加的文字</textarea>
+		<div class="add"><textarea id="addtext" style="height:50px;width: 200px;">在此处输入你想要添加的文字</textarea></div>
+		<div id="confirm">确定</div>
 	</div>
 
 	<div class="controler"><span id="upload">上传图片</span>
-	<span id="download">点击下载</span></div>
+	<span id="download">点击下载</span>
+	</div>
 
 <script type="text/javascript">
 var canvas=document.getElementById('canvas');
@@ -60,7 +77,9 @@ var ctx2=canvas2.getContext('2d');
 ctx2.beginPath();
 			
 
-
+//获取文本输入框的内容
+var txt=document.getElementById('addtext').value;
+console.log(txt);
 
 
 //上传和下载按钮
@@ -82,7 +101,7 @@ ctx.putImageData(imgdata,0,0);
 
 
 //下载模块
-btn.addEventListener('click',function(){
+btn2.addEventListener('click',function(){
 	var type='jpg';
 	download(type)
 })
