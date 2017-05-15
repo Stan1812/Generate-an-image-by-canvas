@@ -14,14 +14,27 @@
 		border:2px  solid #666;
 		display: inline-flex;
 	}
-	span{
+	canvas{
+		border:1px solid #666; 
+		margin:10px;
+	}
+
+	.controler{
+		display: flex;
+		justify-content: space-around;
+		margin:0 20%; 
+	}
+	span{		
 		text-align: center;
 		width: 100px;
 		height: 50px;
-		border:2px solid black;
-		margin: 0 auto;
-		margin-top: 50px;
+		border:2px solid black;		
+		margin-top: 20px;
 		line-height: 50px;
+	}
+	.intext{
+		margin: 0 auto;
+		margin-top: 20px; 
 	}
 </style>
 
@@ -29,20 +42,30 @@
 <body>
 	<div class="con"><canvas id="canvas" height="500px" width="1000px"></canvas>
 	<canvas id="canvas2" height="50px" width="100px"></canvas></div>
-	<span id="download">点击下载</span>
+	<div class="intext">
+		<textarea name="addtext" style="height:100px;width: 200px;">在此处输入你想要添加的文字</textarea>
+	</div>
+
+	<div class="controler"><span id="upload">上传图片</span>
+	<span id="download">点击下载</span></div>
 
 <script type="text/javascript">
 var canvas=document.getElementById('canvas');
 var ctx=canvas.getContext('2d');
+
+
 //test
 var canvas2=document.getElementById('canvas2');
 var ctx2=canvas2.getContext('2d');
 ctx2.beginPath();
-			ctx2.fillRect(0,0,50,50);			
-			ctx2.closePath();
+			
 
-//下载按钮			
-var btn=document.getElementById('download');
+
+
+
+//上传和下载按钮
+var but1=document.getElementById('upload');			
+var btn2=document.getElementById('download');
 
 
 
