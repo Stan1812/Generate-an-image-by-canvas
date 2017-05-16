@@ -50,7 +50,14 @@
 		margin-top: 20px;
 		display: inline;
 	}
-	
+	label{
+		margin-top: 20px;
+		width: 100px;height: 50px;
+		border:1px solid #666;
+		border-radius: 5px;
+		line-height: 50px;
+		text-align: center;
+	}
 </style>
 
 
@@ -58,11 +65,17 @@
 	<div class="con"><canvas id="canvas" height="500px" width="1000px"></canvas>
 	<canvas id="canvas2" height="50px" width="100px"></canvas></div>
 	<div class="intext">
-		<div class="add"><textarea id="addtext" style="height:50px;width: 200px;">在此处输入你想要添加的文字</textarea></div>
+		<div class="add"><textarea id="addtext" style="height:50px;width: 200px;">在此处输入你想要添加的文字</textarea></div>		 
 		<div id="confirm">确定</div>
 	</div>
 
-	<div class="controler"><span id="upload">上传图片</span>
+	<div class="controler">
+
+	<input type="file" name="filename" id="uppic" style="display: none;">
+	<label for="uppic" id="control1"><span id="upload">上传图片</span></label>
+	
+	<input type="button" value="读取图像" id="read_pic" style="display: none;" onclick="readAsDataURL()">
+	<label for="read_pic">读取图像</label>
 	<span id="download">点击下载</span>
 	</div>
 
@@ -87,18 +100,37 @@ var but1=document.getElementById('upload');
 var btn2=document.getElementById('download');
 
 
-
-
+var pic1=document.getElementById('uppic').value;
+console.log(pic1)
 
 //将生成的文字图片生成像素数据，然后写入到大图上
 var imgdata=ctx2.getImageData(0,0,50,500);
-console.log(imgdata);
+
 ctx.putImageData(imgdata,0,0);
 
 
 
 //上传图片模块
-
+  function readAsDataURL(){
+    //检验是否为图像文件
+    var file = document.getElementById("uppic").files[0];
+    if(!/image\/\w+/.test(file.type)){
+        alert('图片');
+        return false;
+    }
+    var reader = new FileReader();
+    //将文件以Data URL形式读入页面
+    reader.readAsDataURL(file);
+    reader.onload=function(e){
+        var picture=this.result;
+       	var pic=new Image();
+       	pic.src=picture;    
+       	ctx.drawImage(pic,0,0);
+    }
+}
+ctx.font = 'bold 40px Arial';
+ctx.fillStyle = '#058';
+ctx.fillText("hahahhaha",100,100);
 
 //下载模块
 btn2.addEventListener('click',function(){
