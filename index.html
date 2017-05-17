@@ -7,7 +7,7 @@
 <style type="text/css">
 	body{
 		display: flex;
-		flex-direction: column;		
+		flex-direction: column;	
 	}
 	.con{
 		margin: 0 auto;
@@ -44,12 +44,15 @@
 		border-radius: 5px;
 		line-height: 50px;
 		text-align: center;
-		margin-left: 20px;
+		margin:0 20px;
+		margin-top: 15px;
+
 	}
 	.intext{
 		margin:0 auto; 
 		margin-top: 20px;
 		display: inline;
+		height: 100px;
 	}
 	label{
 		margin-top: 20px;
@@ -59,6 +62,16 @@
 		line-height: 50px;
 		text-align: center;
 	}
+	#scal{
+		width: 50px;
+		height: 30px;
+		margin-top:40px; 
+		display: none;
+	}
+	form{
+		width: 30px;
+	}
+	
 </style>
 
 
@@ -66,20 +79,49 @@
 	<div class="con"><canvas id="canvas" height="500px" width="1000px"></canvas>
 	<canvas id="canvas2" height="50px" width="100px"></canvas></div>
 	<div class="intext">
-		<div class="add"><textarea id="addtext" style="height:50px;width: 200px;">在此处输入你想要添加的文字</textarea></div>		 
+		<div class="add"><textarea id="addtext" style="height:50px;width: 200px ;margin-top:15px" onBlur="if(this.value=='') this.value='在此输入要添加的文字';" onFocus=" this.value='';" />在此处输入你想要添加的文字</textarea></div>		 
 		<div id="confirm">确定</div>
 		<div id="cancel">取消</div>
+		<!--设置文字的位置，大小，方向等信息-->
+	<table>
+		
+		<tr>
+			<th>文字其起始位置：X轴坐标</th>
+			<th><input type="number" id="pos_x"></th>
+		</tr>
+		
+		<tr>
+			<th>文字其起始位置：Y轴坐标</th>
+			<th><input type="number" id="pos_y"></th>
+		</tr>
+
+		<tr>
+			<th>文字度数：x度</th>
+			<th><input type="number" id="txt_rot"></th>
+		</tr>
+		<tr>
+			<th>文字大小：</th>
+			<th><input type="number" id="fonter"></th>
+		</tr>
+	</table>
 	</div>
 
 	<div class="controler">
 
 	<input type="file" name="filename" id="uppic" style="display: none;">
-	<label for="uppic" id="control1"><span id="upload">上传图片</span></label>
-	
+	<label for="uppic" id="control1"><span id="upload">上传图片</span></label>	
+	<label for="scal" onclick="document.getElementById('scal').style.display='inline'">图片缩放倍数</label>
+	<input type="number" name="scal" id="scal">
 	<input type="button" value="读取图像" id="read_pic" style="display: none;" onclick="readAsDataURL()">
 	<label for="read_pic">读取图像</label>
 	<span id="download">点击下载</span>
+	
+	
+
+
+
 	</div>
+
 
 <script type="text/javascript">
 var canvas=document.getElementById('canvas');
@@ -91,6 +133,7 @@ var canvas2=document.getElementById('canvas2');
 var ctx2=canvas2.getContext('2d');
 ctx2.beginPath();
 			
+var addtext=document.getElementById('addtext')
 
 //获取文本输入框的内容
 //文字写入&文字删除
@@ -104,14 +147,23 @@ Confirm.addEventListener('click',function(){
 
 	//文字样式的设置
 	//test
-	ctx.font = 'bold 40px Arial';
+	var pos_x=document.getElementById('pos_x').value;
+	var pos_y=document.getElementById('pos_y').value;
+	var txt_rot=document.getElementById('txt_rot').value;
+	var font=document.getElementById('fonter').value;
+	console.log(pos_x,pos_y,txt_rot);
+	ctx.save();
+	ctx.font = 'bold '+fonter+'px Arial';
 	ctx.fillStyle = '#058';
-	ctx.fillText(txt,100,100);
+	ctx.fillText(txt,pos_x,pos_y);
+
 })
 
 //删除文字部分
+//不知道该怎样只把文字给删掉而不断删掉整个图片
 Cancel.addEventListener('click',function(){
-	
+	console.log("laji")
+	ctx.clearRect(0,0,1000000,1000000)
 })
 
 
@@ -130,7 +182,8 @@ var imgdata=ctx2.getImageData(0,0,50,500);
 ctx.putImageData(imgdata,0,0);
 
 
-
+var picwidth=100;
+var picheight=100;
 //上传图片模块
   function readAsDataURL(){
     //检验是否为图像文件
@@ -146,7 +199,10 @@ ctx.putImageData(imgdata,0,0);
         var picture=this.result;
        	var pic=new Image();
        	pic.src=picture;    
-       	ctx.drawImage(pic,0,0);
+       	
+       	ctx.scale(0.8,0.8);
+       	ctx.drawImage(pic,0,0)
+
     }
 }
 
@@ -178,10 +234,12 @@ function download(type) {
         var event = document.createEvent('MouseEvents');
         event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
         link.dispatchEvent(event);
+        ctx.scale(1,1);
+        console.log(canvas.width,canvas.height)
     }
     var filename = new Date().toLocaleDateString() + '.' + type;
     saveFile(imgdata, filename);
 }
 	</script>
 </body>
-</html>
+</html> 
