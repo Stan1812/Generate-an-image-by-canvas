@@ -1,4 +1,4 @@
-考试了# Generate-an-image-by-canvas
+# Generate-an-image-by-canvas
 ### 最近在学习canvas就想做些有意思的东西
 这是一个类似于网上流传的很多的那种输入汉字然后自动生成表情包的小东西，然后就想要来试一下
 ### 最终将实现的功能：
