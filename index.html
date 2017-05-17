@@ -37,13 +37,14 @@
 		float:left; 
 		margin:0 50px; 
 	}
-	#confirm{
+	#confirm,#cancel{
 		float: left;
 		width: 100px;height: 50px;
 		border:1px solid #666;
 		border-radius: 5px;
 		line-height: 50px;
 		text-align: center;
+		margin-left: 20px;
 	}
 	.intext{
 		margin:0 auto; 
@@ -67,6 +68,7 @@
 	<div class="intext">
 		<div class="add"><textarea id="addtext" style="height:50px;width: 200px;">在此处输入你想要添加的文字</textarea></div>		 
 		<div id="confirm">确定</div>
+		<div id="cancel">取消</div>
 	</div>
 
 	<div class="controler">
@@ -91,8 +93,27 @@ ctx2.beginPath();
 			
 
 //获取文本输入框的内容
-var txt=document.getElementById('addtext').value;
-console.log(txt);
+//文字写入&文字删除
+ var Confirm=document.getElementById('confirm');
+ var Cancel=document.getElementById('cancel')
+//写入文字
+Confirm.addEventListener('click',function(){
+	var txt=document.getElementById('addtext').value;	
+	console.log(txt);
+
+
+	//文字样式的设置
+	//test
+	ctx.font = 'bold 40px Arial';
+	ctx.fillStyle = '#058';
+	ctx.fillText(txt,100,100);
+})
+
+//删除文字部分
+Cancel.addEventListener('click',function(){
+	
+})
+
 
 
 //上传和下载按钮
@@ -128,9 +149,7 @@ ctx.putImageData(imgdata,0,0);
        	ctx.drawImage(pic,0,0);
     }
 }
-ctx.font = 'bold 40px Arial';
-ctx.fillStyle = '#058';
-ctx.fillText("hahahhaha",100,100);
+
 
 //下载模块
 btn2.addEventListener('click',function(){
