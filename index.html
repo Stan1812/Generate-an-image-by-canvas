@@ -8,11 +8,13 @@
 	body{
 		display: flex;
 		flex-direction: column;	
+		user-select:none;
 	}
 	.con{
 		margin: 0 auto;
 		border:2px  solid #666;
 		display: inline-flex;
+		align-items: center;
 	}
 	canvas{
 		border:1px solid #666; 
@@ -23,6 +25,9 @@
 		display: flex;
 		justify-content: space-around;
 		margin:0 20%; 
+	}
+	#canvas3{
+		display: none;
 	}
 	span{		
 		text-align: center;
@@ -71,13 +76,21 @@
 	form{
 		width: 30px;
 	}
-	
+	#color{
+		width: 200px;
+		height: 100px;
+		line-height: 100px;
+		text-align: center;
+	}
 </style>
 
 
 <body>
 	<div class="con"><canvas id="canvas" height="500px" width="1000px"></canvas>
-	<canvas id="canvas2" height="50px" width="100px"></canvas></div>
+	<canvas id="canvas2" height="300px" width="300px"></canvas></div>
+	<canvas id="canvas3" height="300px" width="300px"></canvas></div>
+
+	<div id="color"></div>
 	<div class="intext">
 		<div class="add"><textarea id="addtext" style="height:50px;width: 200px ;margin-top:15px" onBlur="if(this.value=='') this.value='在此输入要添加的文字';" onFocus=" this.value='';" />在此处输入你想要添加的文字</textarea></div>		 
 		<div id="confirm">确定</div>
@@ -126,14 +139,61 @@
 <script type="text/javascript">
 var canvas=document.getElementById('canvas');
 var ctx=canvas.getContext('2d');
-
-
-//test
-var canvas2=document.getElementById('canvas2');
-var ctx2=canvas2.getContext('2d');
-ctx2.beginPath();
 			
 var addtext=document.getElementById('addtext')
+
+
+//文字取色模块
+var canvas2=document.getElementById('canvas2');
+var ctx2=canvas2.getContext('2d');
+
+//先画上一个简单的图吧。。粗暴渐变
+var linear_gra=ctx2.createLinearGradient(0,0,300,300);
+linear_gra.addColorStop(0,'white');
+linear_gra.addColorStop(1/7,'red');
+linear_gra.addColorStop(2/7,'orange');
+linear_gra.addColorStop(3/7,'yellow');
+linear_gra.addColorStop(4/7,'green');
+linear_gra.addColorStop(5/7,'blue');
+linear_gra.addColorStop(6/7,'purple');
+linear_gra.addColorStop(1,'black');
+
+ctx2.fillStyle=linear_gra;
+ctx2.beginPath();
+ctx2.fillRect(0,0,300,300);
+
+var canvas3=document.getElementById('canvas3');
+var ctx3=canvas3.getContext('2d');
+canvas3.style.height='100px';
+
+/* 更加精确的，，但是现在写的有点晕。。不知道怎么算。。心态崩了
+for (var i=0;i<300;i++){
+    for (var j=0;j<300;j++){
+      ctx2.fillStyle = 'rgb(' + Math.floor(255-42.5*i) + ',' + 
+                       Math.floor(255-42.5*j) + ',0)';
+      ctx2.fillRect(j*1,i*1,1,1);
+    }
+}
+*/
+
+
+var color = document.getElementById('color');
+
+function pick(event) {
+  var x = event.offsetX;
+  var y = event.offsetY;
+  var pixel = ctx2.getImageData(x, y, 1, 1);
+  var data = pixel.data;
+  var rgba = 'rgba(' + data[0] + ',' + data[1] + ',' + data[2] + ',' + (data[3] / 255) + ')';
+  color.style.background = rgba;
+  color.textContent = rgba;
+  console.log(rgba,x,y)
+  ctx.fillStyle=rgba;
+
+}
+canvas2.addEventListener('click', pick);
+
+
 
 //获取文本输入框的内容
 //文字写入&文字删除
@@ -153,8 +213,9 @@ Confirm.addEventListener('click',function(){
 	var font=document.getElementById('fonter').value;
 	console.log(pos_x,pos_y,txt_rot);
 	ctx.save();
-	ctx.font = 'bold '+fonter+'px Arial';
-	ctx.fillStyle = '#058';
+	ctx.font = 'bold '+font+'px Arial';
+	ctx.rotate(Math.PI*txt_rot/180);
+	console.log(Math.PI*txt_rot/180);
 	ctx.fillText(txt,pos_x,pos_y);
 
 })
@@ -172,19 +233,12 @@ Cancel.addEventListener('click',function(){
 var but1=document.getElementById('upload');			
 var btn2=document.getElementById('download');
 
+//上传图片模块
+
 
 var pic1=document.getElementById('uppic').value;
 console.log(pic1)
 
-//将生成的文字图片生成像素数据，然后写入到大图上
-var imgdata=ctx2.getImageData(0,0,50,500);
-
-ctx.putImageData(imgdata,0,0);
-
-
-var picwidth=100;
-var picheight=100;
-//上传图片模块
   function readAsDataURL(){
     //检验是否为图像文件
     var file = document.getElementById("uppic").files[0];
@@ -197,10 +251,9 @@ var picheight=100;
     reader.readAsDataURL(file);
     reader.onload=function(e){
         var picture=this.result;
+        console.log(picture);
        	var pic=new Image();
        	pic.src=picture;    
-       	
-       	ctx.scale(0.8,0.8);
        	ctx.drawImage(pic,0,0)
 
     }
@@ -234,7 +287,7 @@ function download(type) {
         var event = document.createEvent('MouseEvents');
         event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
         link.dispatchEvent(event);
-        ctx.scale(1,1);
+       
         console.log(canvas.width,canvas.height)
     }
     var filename = new Date().toLocaleDateString() + '.' + type;
