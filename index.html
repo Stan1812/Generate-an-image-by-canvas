@@ -76,7 +76,7 @@
 	#scal{
 		width: 50px;
 		height: 30px;
-		margin-top:40px; 
+		margin-top:28px; 
 		display: none;
 	}
 	form{
@@ -159,11 +159,7 @@
 	<input type="button" value="读取图像" id="read_pic" style="display: none;" onclick="readAsDataURL()">
 	<label for="read_pic" id="read_pic_but">读取图像</label>
 	<span id="download">点击下载</span>
-	
-	
-
-
-
+	<div id="grayscalebtn">grayscalebtn</div>
 	</div>
 
 
@@ -266,6 +262,7 @@ var btn2=document.getElementById('download');
 
 //上传图片模块
 
+var scal_control=document.getElementById('scal').value;
 
 var pic1=document.getElementById('uppic').value;
 console.log(pic1)
@@ -283,13 +280,50 @@ console.log(pic1)
     reader.readAsDataURL(file);
     reader.onload=function(e){
         var picture=this.result;
-       
        	var pic=new Image();
-       	pic.src=picture;    
+       	pic.src=picture;
+       	//调整图片的大小
+       	var scal_control=document.getElementById('scal').value; 
+      	if(scal_control= " "){
+      		scal_control=1;
+      		ctx.scale(scal_control,scal_control);
+      	};
+      	ctx.scale(scal_control,scal_control);
+       
+       	console.log(scal_control) 
+
        	ctx.drawImage(pic,0,0)
+      	
 
     }
 }
+
+//图片处理的其他功能
+
+//调整灰度
+
+function draw() {
+  var imageData0 = ctx.getImageData(0, 0, canvas.width,canvas.height);
+  var data0 = imageData0.data;
+    
+ 	
+	function  grayscale()  {
+    for (var i = 0; i < data0.length; i += 4) {
+      var avg = (data0[i] + data0[i + 1] + data0[i + 2]) / 3;
+      data0[i]     = avg; // red
+      data0[i + 1] = avg; // green
+      data0[i + 2] = avg; // blue
+    }
+    
+   
+  };
+	grayscale(); 
+	ctx.putImageData(imageData0, 0, 0);
+    console.log(imageData0)
+} 
+var grayscalebtn = document.getElementById('grayscalebtn');
+ grayscalebtn.addEventListener('click',draw);
+
 
 
 //下载模块
