@@ -326,6 +326,87 @@ var grayscalebtn = document.getElementById('grayscalebtn');
 
 
 
+
+//打马赛克
+//啊啊啊，改不好，心态爆炸
+function mosaic_drawer(event) 
+{
+	var layer_x=event.offsetX;
+	var layer_y=event.offsetY;4
+	var pix = ctx.getImageData(0,0,10,10);
+	console.log(pix);
+  	ctx.putImageData(pix,layer_x,layer_y);
+}
+canvas.addEventListener('click',mosaic_drawer);
+
+
+//手写笔迹
+
+ /*function line_writer (){
+               
+canvas.addEventListener('touchstart',function(evt){
+evt.preventDefault();
+context.beginPath();
+context.moveTo(evt.touches[0].pageX,evt.touches[0].pageY);
+},false);
+canvas.addEventListener('touchmove',function(evt){
+context.lineTo(evt.touches[0].pageX,evt.touches[0].pageY);
+context.stroke();
+},false);
+canvas.addEventListener('touchend',function(evt){
+},false);
+};
+line_writer();*/
+canvas.addEventListener('mousemove', onMouseMove, false);  
+ canvas.addEventListener('mousedown', onMouseDown, false);  
+ canvas.addEventListener('mouseup', onMouseUp, false);  
+ 
+ var linex = new Array();  
+ var liney = new Array();  
+ var linen = new Array();  
+  
+ var lastX = -1;  
+ var lastY = -1;  
+
+ var flag = 0;  
+  
+ function onMouseMove(evt) {  
+    if (flag == 1) {  
+       linex.push(evt.layerX);  
+       liney.push(evt.layerY);  
+       linen.push(1);  
+       ctx.save();  
+       ctx.translate(ctx.canvas.width/2, ctx.canvas.height/2);  
+       ctx.translate(-ctx.canvas.width/2, -ctx.canvas.height/2);  
+       ctx.beginPath();  
+       ctx.lineWidth = 5 + Math.random() * 10;  
+  
+       for (var i=1;i<linex.length;i++) {  
+             lastX = linex[i];  
+             lastY = liney[i];  
+             if (linen[i] == 0) {  
+                ctx.moveTo(lastX,lastY);  
+             } else {  
+                ctx.lineTo(lastX,lastY);  
+             }  
+       } 
+       ctx.stroke();  
+       ctx.restore();  
+    }  
+ }  
+ function onMouseDown(evt) {  
+    flag = 1;  
+    linex.push(evt.layerX);  
+    liney.push(evt.layerY);  
+    linen.push(0);  
+ }  
+ function onMouseUp(evt) {  
+    flag = 0;  
+     linex.push(evt.layerX);  
+     liney.push(evt.layerY);  
+    linen.push(0);  
+ }  
+
 //下载模块
 btn2.addEventListener('click',function(){
 	var type='jpg';
