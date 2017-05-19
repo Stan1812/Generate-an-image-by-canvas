@@ -13,8 +13,14 @@
 	.con{
 		margin: 0 auto;
 		border:2px  solid #666;
-		display: inline-flex;
+		display: flex;
 		align-items: center;
+	}
+	.item2{
+		width: 400px;	
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center; 
 	}
 	canvas{
 		border:1px solid #666; 
@@ -81,16 +87,41 @@
 		height: 100px;
 		line-height: 100px;
 		text-align: center;
+		border-radius: 5px;
+		border:1px solid #666;
+	}
+	.button{
+		animation: button_trans 0.1s;
+	}	
+	@keyframes button_trans{
+		30%{
+			transform: scale(0.8,0.8);
+			background: #666
+		}
+		60%{
+			transform: scale(1.05,1.05);
+		}
+		to{
+			transform: scale(1,1);
+			background: #fff;
+		}
 	}
 </style>
 
 
 <body>
-	<div class="con"><canvas id="canvas" height="500px" width="1000px"></canvas>
-	<canvas id="canvas2" height="300px" width="300px"></canvas></div>
-	<canvas id="canvas3" height="300px" width="300px"></canvas></div>
+	<div class="con">
+	  <canvas id="canvas" height="500px" width="1000px"></canvas>
 
-	<div id="color"></div>
+	  <div class="item2">
+	    <canvas id="canvas2" height="300px" width="300px"></canvas>
+	    <div id="color">这里是颜色</div>
+	  </div>
+	</div>
+
+	  <canvas id="canvas3" height="300px" width="300px"></canvas>
+
+	
 	<div class="intext">
 		<div class="add"><textarea id="addtext" style="height:50px;width: 200px ;margin-top:15px" onBlur="if(this.value=='') this.value='在此输入要添加的文字';" onFocus=" this.value='';" />在此处输入你想要添加的文字</textarea></div>		 
 		<div id="confirm">确定</div>
@@ -126,7 +157,7 @@
 	<label for="scal" onclick="document.getElementById('scal').style.display='inline'">图片缩放倍数</label>
 	<input type="number" name="scal" id="scal">
 	<input type="button" value="读取图像" id="read_pic" style="display: none;" onclick="readAsDataURL()">
-	<label for="read_pic">读取图像</label>
+	<label for="read_pic" id="read_pic_but">读取图像</label>
 	<span id="download">点击下载</span>
 	
 	
@@ -241,6 +272,7 @@ console.log(pic1)
 
   function readAsDataURL(){
     //检验是否为图像文件
+   	document.getElementById('read_pic_but').className+='button'
     var file = document.getElementById("uppic").files[0];
     if(!/image\/\w+/.test(file.type)){
         alert('图片');
@@ -251,7 +283,7 @@ console.log(pic1)
     reader.readAsDataURL(file);
     reader.onload=function(e){
         var picture=this.result;
-        console.log(picture);
+       
        	var pic=new Image();
        	pic.src=picture;    
        	ctx.drawImage(pic,0,0)
