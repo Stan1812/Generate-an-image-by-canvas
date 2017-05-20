@@ -91,7 +91,7 @@
 		border:1px solid #666;
 	}
 	.button{
-		animation: button_trans 0.1s;
+		animation: button_trans 0.5s;
 	}	
 	@keyframes button_trans{
 		30%{
@@ -153,13 +153,18 @@
 	<div class="controler">
 
 	<input type="file" name="filename" id="uppic" style="display: none;">
-	<label for="uppic" id="control1"><span id="upload">上传图片</span></label>	
+	<label for="uppic" id="control1"><div id="upload">上传图片</div></label>	
+
 	<label for="scal" onclick="document.getElementById('scal').style.display='inline'">图片缩放倍数</label>
 	<input type="number" name="scal" id="scal">
+
 	<input type="button" value="读取图像" id="read_pic" style="display: none;" onclick="readAsDataURL()">
 	<label for="read_pic" id="read_pic_but">读取图像</label>
+
+	
+	<span id="grayscalebtn">黑白滤镜</span>
+	<span id="mosaic_drawer">马赛克工具</span>
 	<span id="download">点击下载</span>
-	<div id="grayscalebtn">grayscalebtn</div>
 	</div>
 
 
@@ -216,6 +221,7 @@ function pick(event) {
   color.textContent = rgba;
   console.log(rgba,x,y)
   ctx.fillStyle=rgba;
+  ctx.strokeStyle=rgba;
 
 }
 canvas2.addEventListener('click', pick);
@@ -249,9 +255,14 @@ Confirm.addEventListener('click',function(){
 
 //删除文字部分
 //不知道该怎样只把文字给删掉而不断删掉整个图片
+//现在竟然做成了清除整个canvas的按钮，，尴尬
 Cancel.addEventListener('click',function(){
 	console.log("laji")
 	ctx.clearRect(0,0,1000000,1000000)
+	clear_lines();
+	console.log(linex,liney,linen);
+
+
 })
 
 
@@ -272,7 +283,7 @@ console.log(pic1)
    	document.getElementById('read_pic_but').className+='button'
     var file = document.getElementById("uppic").files[0];
     if(!/image\/\w+/.test(file.type)){
-        alert('图片');
+        alert('仅支持上传图片');
         return false;
     }
     var reader = new FileReader();
@@ -329,16 +340,17 @@ var grayscalebtn = document.getElementById('grayscalebtn');
 
 //打马赛克
 //啊啊啊，改不好，心态爆炸
-function mosaic_drawer(event) 
-{
-	var layer_x=event.offsetX;
-	var layer_y=event.offsetY;4
-	var pix = ctx.getImageData(0,0,10,10);
-	console.log(pix);
-  	ctx.putImageData(pix,layer_x,layer_y);
-}
-canvas.addEventListener('click',mosaic_drawer);
-
+function mosaic_drawer_ctol(){
+	function mosaic_drawer(event) 
+	{
+		var layer_x=event.offsetX;
+		var layer_y=event.offsetY;4
+		var pix = ctx.getImageData(0,0,10,10);
+		console.log(pix);
+  		ctx.putImageData(pix,layer_x,layer_y);
+	}
+	canvas.addEventListener('click',mosaic_drawer);}
+document.getElementById('mosaic_drawer').addEventListener('click',mosaic_drawer_ctol)
 
 //手写笔迹
 
@@ -375,9 +387,6 @@ canvas.addEventListener('mousemove', onMouseMove, false);
        linex.push(evt.layerX);  
        liney.push(evt.layerY);  
        linen.push(1);  
-       ctx.save();  
-       ctx.translate(ctx.canvas.width/2, ctx.canvas.height/2);  
-       ctx.translate(-ctx.canvas.width/2, -ctx.canvas.height/2);  
        ctx.beginPath();  
        ctx.lineWidth = 5 + Math.random() * 10;  
   
@@ -390,8 +399,7 @@ canvas.addEventListener('mousemove', onMouseMove, false);
                 ctx.lineTo(lastX,lastY);  
              }  
        } 
-       ctx.stroke();  
-       ctx.restore();  
+       ctx.stroke();
     }  
  }  
  function onMouseDown(evt) {  
@@ -405,7 +413,31 @@ canvas.addEventListener('mousemove', onMouseMove, false);
      linex.push(evt.layerX);  
      liney.push(evt.layerY);  
     linen.push(0);  
- }  
+ }  //这个函数有bug，在清屏之后，再再次进行绘制之前的线条会出现
+
+//再写一个函数，用来清除数组中无用的信息
+function clear_lines(){
+	/*for(var j=0;j<linex.length;j++)
+	{
+		linex.pop();
+		liney.pop();
+		linen.pop();
+	}这个方法不知道为什么不能将数组清空。。。
+	*/
+	linex.length=0;
+	liney.length=0;
+	linen.length=0;
+}
+
+
+
+
+//模糊图片画笔
+function blur_drawer(){
+
+}
+
+
 
 //下载模块
 btn2.addEventListener('click',function(){
