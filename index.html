@@ -33,7 +33,7 @@
 		margin:0 20%; 
 	}
 	#canvas3{
-		display: none;
+	display: none;
 	}
 	span{		
 		text-align: center;
@@ -119,7 +119,7 @@
 	  </div>
 	</div>
 
-	  <canvas id="canvas3" height="300px" width="300px"></canvas>
+	  <canvas id="canvas3" height="500px" width="300px"></canvas>
 
 	
 	<div class="intext">
@@ -164,7 +164,10 @@
 	
 	<span id="grayscalebtn">黑白滤镜</span>
 	<span id="mosaic_drawer">马赛克工具</span>
+	<span id="line_drawer">画笔工具</span>
+	<span id="magnifying_glass">放大镜</span>
 	<span id="download">点击下载</span>
+	
 	</div>
 
 
@@ -299,6 +302,7 @@ console.log(pic1)
       		scal_control=1;
       		ctx.scale(scal_control,scal_control);
       	};
+      
       	ctx.scale(scal_control,scal_control);
        
        	console.log(scal_control) 
@@ -339,7 +343,7 @@ var grayscalebtn = document.getElementById('grayscalebtn');
 
 
 //打马赛克
-//啊啊啊，改不好，心态爆炸
+
 function mosaic_drawer_ctol(){
 	function mosaic_drawer(event) 
 	{
@@ -369,6 +373,12 @@ canvas.addEventListener('touchend',function(evt){
 },false);
 };
 line_writer();*/
+
+
+document.getElementById('line_drawer').addEventListener('click',line_drawer,false);
+function line_drawer() {
+	
+
 canvas.addEventListener('mousemove', onMouseMove, false);  
  canvas.addEventListener('mousedown', onMouseDown, false);  
  canvas.addEventListener('mouseup', onMouseUp, false);  
@@ -413,9 +423,12 @@ canvas.addEventListener('mousemove', onMouseMove, false);
      linex.push(evt.layerX);  
      liney.push(evt.layerY);  
     linen.push(0);  
- }  //这个函数有bug，在清屏之后，再再次进行绘制之前的线条会出现
+ }  
+}
 
-//再写一个函数，用来清除数组中无用的信息
+
+
+//清除画布时清除数组信息
 function clear_lines(){
 	/*for(var j=0;j<linex.length;j++)
 	{
@@ -438,8 +451,60 @@ function blur_drawer(){
 }
 
 
+//放大镜功能
 
+function magnifying_glass(event){	
+
+	var ball={
+		x:canvas.width/2,
+		y:canvas.height/2,
+		radius:30,
+		color:'rgba(6,6,6,0.5)',
+		draw:function(){
+			ctx.beginPath();
+			ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
+			ctx.closePath();
+			ctx.fillStyle=this.color;
+			ctx.fill();
+			}
+		}
+function clear(){
+	ctx.clearRect(ball.x-ball.radius,ball.y-ball.radius,ball.radius*2,ball.radius*2)
+}
+
+canvas.addEventListener('mousemove',function(event){
+	clear();
+	ball.x=event.layerX;
+	ball.y=event.layerY;
+	readAsDataURL();
+	ball.draw();
+	var pixinfo = ctx.getImageData(ball.x,ball.y,10,10);
+	ctx3.putImageData(pixinfo,0,0,100,100,200,200);
+	
+})
+canvas.addEventListener('mouseout',function(){
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	readAsDataURL();
+})
+/*function magnifying_glass(event){
+	//放大镜
+	var pixinfo = ctx.getImageData(dx,dy,10,10);
+	ctx.beginPath();
+	ctx.arc(dx,dy,5,0,Math.PI*2);
+	ctx.fill();
+	ctx.clearRect(dx-5,dy-5,4,4);
+	ctx3.putImageData(pixinfo,0,0,100,100,200,200);
+	
+	
+}	
+canvas.addEventListener('mousemove',magnifying_glass);
+*/
+}
+
+var mag_glass=document.getElementById('magnifying_glass')
+mag_glass.addEventListener('click',magnifying_glass);
 //下载模块
+
 btn2.addEventListener('click',function(){
 	var type='jpg';
 	download(type)
@@ -450,7 +515,7 @@ function download(type) {
     //设置保存图片的类型
     var imgdata = canvas.toDataURL(type);
     
-    //将mime-type改为image/octet-stream,强制让浏览器下载
+    //将mime-type改为image/octet-stream
     var fixtype = function (type) {
         type = type.toLocaleLowerCase().replace(/jpg/i, 'jpeg');
         var r = type.match(/png|jpeg|bmp|gif/)[0];
