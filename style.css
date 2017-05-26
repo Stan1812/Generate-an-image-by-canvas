@@ -1,0 +1,105 @@
+
+	body{
+		display: flex;
+		flex-direction: column;	
+		user-select:none;
+	}
+	.con{
+		margin: 0 auto;
+		border:2px  solid #666;
+		display: flex;
+		align-items: center;
+	}
+	#item1{
+		display: flex;
+		align-items: flex-end;
+	}
+	.item2{
+		width: 400px;	
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center; 
+	}
+	canvas{
+		border:1px solid #666; 
+		margin:10px;
+	}
+
+	.controler{
+		display: flex;
+		justify-content: space-around;
+	}
+	
+	span{		
+		text-align: center;
+		width: 100px;
+		height: 50px;
+		border:2px solid black;
+		border-radius: 5px;		
+		margin-top: 20px;
+		line-height: 50px;
+		
+	}
+	.add{
+		float:left; 
+		margin:0 50px; 
+	}
+	#confirm,#cancel{
+		float: left;
+		width: 100px;height: 50px;
+		border:1px solid #666;
+		border-radius: 5px;
+		line-height: 50px;
+		text-align: center;
+		margin:0 20px;
+		margin-top: 15px;
+
+	}
+
+	.intext{
+		margin:0 auto; 
+		margin-top: 20px;
+		display: inline;
+		height: 100px;
+	}
+	label{
+		margin-top: 20px;
+		width: 100px;height: 50px;
+		border:1px solid #666;
+		border-radius: 5px;
+		line-height: 50px;
+		text-align: center;
+	}
+	#_scale{
+		width: 50px;
+		height: 30px;
+		margin-top:28px; 
+		
+	}
+	form{
+		width: 30px;
+	}
+	#color{
+		width: 200px;
+		height: 100px;
+		line-height: 100px;
+		text-align: center;
+		border-radius: 5px;
+		border:1px solid #666;
+	}
+	.button{
+		animation: button_trans 0.5s;
+	}	
+	@keyframes button_trans{
+		30%{
+			transform: scale(0.8,0.8);
+			background: #666
+		}
+		60%{
+			transform: scale(1.05,1.05);
+		}
+		to{
+			transform: scale(1,1);
+			background: #fff;
+		}
+	}
