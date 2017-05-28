@@ -24,7 +24,15 @@
 		border:1px solid #666; 
 		margin:10px;
 	}
-
+	#canvas3{
+		 display: none;
+        border:1px solid #ccc;
+        border-radius:101px;
+        -webkit-border-radius:101px;
+        -o-border-radius:101px;
+        -moz-border-radius:101px;
+        position: absolute;
+	}
 	.controler{
 		display: flex;
 		justify-content: space-around;

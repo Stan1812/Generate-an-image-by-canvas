@@ -181,6 +181,8 @@ console.log(pic1)
 				
 				console.log(scal_control);
 				ctx.drawImage(pic,0,0)
+				return pic;
+
 				
 
 		}
@@ -357,82 +359,70 @@ function blur_drawer(){
 
 
 //放大镜功能
-var canvas3=document.createElement('canvas');
-	canvas3.style.position='absolute'
-	canvas3.height=200;
-	canvas3.width=200;
-	canvas3.style.top=100;
-	canvas3.style.left=100;
-	item1.appendChild(canvas3);
-	ctx3=canvas3.getContext('2d');
 
-	var ball={
-		x:canvas.width/2,
-		y:canvas.height/2,
-		radius:30,
-		color:'rgba(6,6,6,0.5)',
-		draw:function(){
-			ctx.beginPath();
-			ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
-			ctx.closePath();
-			ctx.fillStyle=this.color;
-			ctx.fill();
-			}
-		}
-function clear(){
-	ctx.clearRect(ball.x-ball.radius,ball.y-ball.radius,ball.radius*2,ball.radius*2)
-}
-
-function mousemove_(event){
-	clear();
-	ball.x=event.layerX;
-	ball.y=event.layerY;
-	readAsDataURL();
-	ball.draw();
-	var pixinfo = ctx.getImageData(ball.x,ball.y,10,10);
-	ctx3.putImageData(pixinfo,0,0,100,100,200,200);
+var i=1;
+function magnifying_glass(event){
 	
 
-	
-}
+	var imgcan = document.getElementById("canvas"),
+        glasscan = document.getElementById("canvas3"),
+        imgContext = imgcan.getContext("2d"),
+        glassContext = glasscan.getContext("2d"),
+        img = new Image(),
+        mouse = captureMouse(imgcan);
+   
+    img.onload = function(){ 
+        imgContext.drawImage(pic,0,0);
+    }
+    //获取元素内鼠标位置
+    function captureMouse(element){
+        var  mouse = {x:0 , y:0};
+        element.addEventListener('mousemove' , function(event){
+        var x , y;
+        if(event.pageX || event.pageY){
+            x = event.pageX;
+            y = event.pageY;
+        }else{
+            x = event.clientX + (document.body.scrollLeft || 
+            document.documentElement.scrollLeft);
+            y = event.clientY + (document.body.scrollTop || 
+            document.documentElement.scrollTop);
+        }
+        x -= element.offsetLeft;
+        y -= element.offsetTop;
+        mouse.x = x;
+        mouse.y = y;
+        } , false)
+        return mouse;
+    }
+    //给画布绑定鼠标移动事件
+    imgcan.addEventListener("mousemove",mouse_move)
+     function mouse_move(){
+            glassContext.clearRect(0,0,glasscan.width,glasscan.height);
+            glasscan.style.left = mouse.x + 10 + 'px';
+            glasscan.style.top = mouse.y + 10 + 'px';
+            glasscan.style.display = "block";
+            var drawWidth = 50,
+                drawHeight = 50;
+            glassContext.drawImage(canvas,mouse.x-drawWidth/4,mouse.y-drawHeight/4,drawWidth,drawHeight,0,0,drawWidth*4,drawHeight*4);     //实现放大镜
+    };
+    //绑定鼠标移出事件
+    imgcan.onmouseout = function(){
+            glasscan.style.display = "none";
+    }
 
-function magnifying_glass(event){	
-
-canvas.addEventListener('mousemove',mousemove_);
-
-canvas.addEventListener('mouseout',function(){
-	
-	ctx.clearRect(0,0,canvas.width,canvas.height);
-	readAsDataURL();
-})
-/*function magnifying_glass(event){
-	//放大镜
-	var pixinfo = ctx.getImageData(dx,dy,10,10);
-	ctx.beginPath();
-	ctx.arc(dx,dy,5,0,Math.PI*2);
-	ctx.fill();
-	ctx.clearRect(dx-5,dy-5,4,4);
-	ctx3.putImageData(pixinfo,0,0,100,100,200,200);
-	
-	
 }	
-canvas.addEventListener('mousemove',magnifying_glass);
-*/
-}
+
+
 
 var mag_glass=document.getElementById('magnifying_glass')
-	var i=1;
-	mag_glass.addEventListener('click',function()
-	{	
-		if(i)
-			{magnifying_glass(event);
-				console.log('fuckyou')
-			i=0;}
-		
-		else if(!i){
-			canvas.removeEventListener('mousemove',mousemove_)
-		}
-	});
+mag_glass.addEventListener('click',function(){
+	 var i=1;
+	 if (i==1) {magnifying_glass(event);
+	 console.log("laji");i++
+	 console.log(i)}
+	
+})
 
 
 //下载模块
