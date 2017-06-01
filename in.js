@@ -4,7 +4,7 @@ var ctx=canvas.getContext('2d');
 			
 var addtext=document.getElementById('addtext')
 
-
+//beiing
 
 //canvas辣鸡尺寸调整，发现在基于canvas的时候拖动貌似不是很好解决
 function cvs_size_(){
@@ -154,8 +154,13 @@ var pic1=document.getElementById('uppic').value;
 console.log(pic1)
 
 	function readAsDataURL(){
+		
+		if (!document.getElementById('read_pic_but').className) 
+			{document.getElementById('read_pic_but').className+='button';}
+		else{document.getElementById('read_pic_but').className=""}
+		console.log(document.getElementById('read_pic_but').className)
+
 		//检验是否为图像文件
-		document.getElementById('read_pic_but').className+='button'
 		var file = document.getElementById("uppic").files[0];
 		if(!/image\/\w+/.test(file.type)){
 				alert('仅支持上传图片');
@@ -198,7 +203,7 @@ function pix_procs(){
 	var data0 = imageData0.data;
 	data_length=data0.length;
 	//黑白效果
-	function grayscale()  {
+	function grayscale(id)  {
 			for (var i = 0; i < data_length; i += 4) {
 			 var avg = (data0[i] + data0[i + 1] + data0[i + 2]) / 3;
 				data0[i]     = avg; // red
@@ -207,6 +212,7 @@ function pix_procs(){
 			}
 			ctx.putImageData(imageData0, 0, 0);
 			console.log(imageData0);
+			
 		};
 
 	//负片效果
@@ -218,6 +224,7 @@ function pix_procs(){
 		}
 		ctx.putImageData(imageData0, 0, 0);
 		console.log(imageData0);
+
 	}
 	
 	//高斯模糊
@@ -237,8 +244,12 @@ function pix_procs(){
 }
 
 var pix_procsbtn=document.getElementById('pix_procs');
-pix_procsbtn.addEventListener('click',pix_procs);
-
+pix_procsbtn.addEventListener('click',function(){
+	if (!document.getElementById('pix_procs').className) 
+			{document.getElementById('pix_procs').className+='button';}
+	else{document.getElementById('pix_procs').className=""};
+	pix_procs();
+})
 
 //打马赛克
 
@@ -348,7 +359,16 @@ function clear_lines(){
 	linen.length=0;
 }
 
-document.getElementById('line_drawer').addEventListener('click',line_drawer);
+var j=1;
+document.getElementById('line_drawer').addEventListener('click',function controler(){
+	if(j==1){line_drawer();j++;}
+	else if(j!=1){
+		canvas.removeEventListener('mousemove', onMouseMove, false);  
+ 		canvas.removeEventListener('mousedown', onMouseDown, false);  
+ 		canvas.removeEventListener('mouseup', onMouseUp, false); 
+	}
+}
+	);
 
 
 

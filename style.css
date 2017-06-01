@@ -96,18 +96,30 @@
 		border:1px solid #666;
 	}
 	.button{
-		animation: button_trans 0.5s;
-	}	
-	@keyframes button_trans{
-		30%{
-			transform: scale(0.8,0.8);
-			background: #666
-		}
-		60%{
-			transform: scale(1.05,1.05);
-		}
-		to{
-			transform: scale(1,1);
-			background: #fff;
-		}
+  		 background: #666;
+  		color: #fff;
+  		border-radius: 0.5em;
+  		overflow:hidden;
+  		position: relative;
+  		
+  		line-height: 50px;
+  		width: 100px;
 	}
+	.button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  bottom: -50%;
+  left: -50%;
+  background: linear-gradient(to bottom, rgba(229, 172, 142, 0), rgba(255,255,255,0.5) 50%, rgba(229, 172, 142, 0));
+  transform: rotate(60deg) translate(-5em, 7.5em);
+}
+.button:hover::after, .button:focus::after {
+  animation: shine 1s forwards;
+}
+@keyframes shine {
+  100% {
+    transform: rotate(60deg) translate(1em, -9em);
+  }
+}
