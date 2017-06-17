@@ -9,14 +9,16 @@ var addtext=document.getElementById('addtext')
 //canvas辣鸡尺寸调整，发现在基于canvas的时候拖动貌似不是很好解决
 function cvs_size_(){
 	
-function cvs_size_chag(event){
+		function cvs_size_chag(event){
 
-		var w_x=event.layerX;
-		var h_y=event.layerY;
-		canvas.height=h_y;
-		canvas.width=w_x;
+			var w_x=event.layerX;
+			var h_y=event.layerY;
+			canvas.height=h_y;
+			canvas.width=w_x;
 
-}  
+		}  
+
+
 		var i=0;
 		
 		canvas.addEventListener('click',function(){
@@ -141,7 +143,6 @@ Cancel.addEventListener('click',function(){
 })
 
 
-
 //上传和下载按钮
 var but1=document.getElementById('upload');			
 var btn2=document.getElementById('download');
@@ -193,7 +194,7 @@ console.log(pic1)
 		}
 }
 
-//图片处理的其他功能
+//图片处理的其他功能-----------------------------------------------------------
 
 //图片处理中的各种滤镜
 
@@ -248,7 +249,7 @@ pix_procsbtn.addEventListener('click',function(){
 	if (!document.getElementById('pix_procs').className) 
 			{document.getElementById('pix_procs').className+='button';}
 	else{document.getElementById('pix_procs').className=""};
-	pix_procs();
+	pix_procs()
 })
 
 //打马赛克
@@ -270,24 +271,8 @@ function mosaic_drawer_ctol(){
 		});}
 document.getElementById('mosaic_drawer').addEventListener('click',mosaic_drawer_ctol)
 
+//----------------------------------------------
 //手写笔迹
-
- /*function line_writer (){
-							 
-canvas.addEventListener('touchstart',function(evt){
-evt.preventDefault();
-context.beginPath();
-context.moveTo(evt.touches[0].pageX,evt.touches[0].pageY);
-},false);
-canvas.addEventListener('touchmove',function(evt){
-context.lineTo(evt.touches[0].pageX,evt.touches[0].pageY);
-context.stroke();
-},false);
-canvas.addEventListener('touchend',function(evt){
-},false);
-};
-line_writer();*/
-
 
 //非常不情愿。。但是还是把变量定义到了全局。。闭包还是不会用。。继续看吧。。
  var linex = new Array();  
@@ -315,7 +300,7 @@ canvas.addEventListener('mousemove', onMouseMove, false);
 			 liney.push(evt.layerY);  
 			 linen.push(1);  
 			 ctx.beginPath();  
-			 ctx.lineWidth = 5 + Math.random() * 10;  
+			 ctx.lineWidth = 1 + Math.random() * 5;  
 	
 			 for (var i=1;i<linex.length;i++) {  
 						 lastX = linex[i];  
@@ -359,16 +344,7 @@ function clear_lines(){
 	linen.length=0;
 }
 
-var j=1;
-document.getElementById('line_drawer').addEventListener('click',function controler(){
-	if(j==1){line_drawer();j++;}
-	else if(j!=1){
-		canvas.removeEventListener('mousemove', onMouseMove, false);  
- 		canvas.removeEventListener('mousedown', onMouseDown, false);  
- 		canvas.removeEventListener('mouseup', onMouseUp, false); 
-	}
-}
-	);
+document.getElementById('line_drawer').addEventListener('click',line_drawer);
 
 
 
@@ -380,7 +356,6 @@ function blur_drawer(){
 
 //放大镜功能
 
-var i=1;
 function magnifying_glass(event){
 	
 
